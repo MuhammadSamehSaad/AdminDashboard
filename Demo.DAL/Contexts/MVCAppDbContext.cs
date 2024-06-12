@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -15,7 +16,12 @@ namespace Demo.DAL.Contexts
             
         }
 
-        
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        { 
+            //Apply Any Class Implement IEntityTypeConfiguration Interface
+            modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+        }
+
 
         public DbSet<Department> Departments { get; set; }
 
