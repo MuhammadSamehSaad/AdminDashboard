@@ -1,5 +1,6 @@
 ﻿using Demo.BLL.Interfaces;
 using Demo.DAL.Contexts;
+using Demo.DAL.Entites;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Demo.BLL.Repositories
 {
-    public class GenericRepository<T> : IGenericRepository<T> where T : class
+    public class GenericRepository<T> : IGenericRepository<T> where T : ModelBase
     {
         private readonly MVCAppDbContext _context;
 

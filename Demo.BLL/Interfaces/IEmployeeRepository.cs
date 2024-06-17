@@ -14,3 +14,4 @@ namespace Demo.BLL.Interfaces
         IQueryable<Employee> SearchEmployeesByName(string name);
     }
 }
+ 

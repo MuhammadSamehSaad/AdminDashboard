@@ -8,10 +8,9 @@ using System.Threading.Tasks;
 
 namespace Demo.DAL.Entites
 {
-    public class Employee
+    public class Employee : ModelBase
     {
 
-        public int Id { get; set; }
 
         [Required]
         [MaxLength(50)]
@@ -42,6 +41,7 @@ namespace Demo.DAL.Entites
         public int? DepartmentId { get; set; }
 
         //Navigation Property (One)
+        [InverseProperty("Employees")]
         public Department Department { get; set; }
 
         public string ImageName { get; set; }
