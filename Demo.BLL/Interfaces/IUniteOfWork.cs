@@ -8,8 +8,12 @@ namespace Demo.BLL.Interfaces
 {
     public interface IUniteOfWork
     {
-            public IEmployeeRepository EmployeeRepository { get; set; }
-            public IDepartmentRepository DepartmentRepository { get; set; }
+        public IEmployeeRepository EmployeeRepository { get; set; }
+        public IDepartmentRepository DepartmentRepository { get; set; }
+
+        int Complete();
+
+
 
 
     }

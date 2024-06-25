@@ -41,6 +41,7 @@ namespace Demo.PL.Controllers
             {
                 var mappedDep = _mapper.Map<DepartmentViewModel, Department>(departmentVM);
                 _uniteOfWork.DepartmentRepository.Add(mappedDep);
+                var cont = _uniteOfWork.Complete();
 
                 TempData["Message"] = "The Department Has Been Created Successfuly";
                 return RedirectToAction(nameof(Index));
@@ -58,7 +59,7 @@ namespace Demo.PL.Controllers
             {
                 return NotFound();
             }
-            var mappedEmp = _mapper.Map<Department,DepartmentViewModel>(department);
+            var mappedEmp = _mapper.Map<Department, DepartmentViewModel>(department);
             return View(viewName, mappedEmp);
         }
         public IActionResult Edit(int? id)
@@ -90,6 +91,7 @@ namespace Demo.PL.Controllers
                 {
                     var mappedEmp = _mapper.Map<DepartmentViewModel, Department>(departmentVM);
                     _uniteOfWork.DepartmentRepository.Update(mappedEmp);
+                    _uniteOfWork.Complete();
                     return RedirectToAction(nameof(Index));
                 }
                 catch (Exception ex)
@@ -117,8 +119,9 @@ namespace Demo.PL.Controllers
                 return BadRequest();
             try
             {
-                var mapppedEmp = _mapper.Map<DepartmentViewModel,Department>(departmentVM);
+                var mapppedEmp = _mapper.Map<DepartmentViewModel, Department>(departmentVM);
                 _uniteOfWork.DepartmentRepository.Delete(mapppedEmp);
+                _uniteOfWork.Complete();
                 return RedirectToAction(nameof(Index));
             }
             catch (Exception ex)

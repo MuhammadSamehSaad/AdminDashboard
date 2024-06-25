@@ -1,4 +1,5 @@
 ﻿using Demo.BLL.Interfaces;
+using Demo.DAL.Contexts;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,15 +8,28 @@ using System.Threading.Tasks;
 
 namespace Demo.BLL.Repositories
 {
-    public class UniteOfWork : IUniteOfWork
+    public class UniteOfWork : IUniteOfWork 
     {
-        public IEmployeeRepository EmployeeRepository { get; set; }
-        public IDepartmentRepository DepartmentRepository { get; set; }
+        private readonly MVCAppDbContext _context;
 
-        public UniteOfWork(IEmployeeRepository employeeRepository, IDepartmentRepository departmentRepository)    
+        public IEmployeeRepository EmployeeRepository { get; set; } = null;
+        public IDepartmentRepository DepartmentRepository { get; set; } = null;
+
+        public UniteOfWork(MVCAppDbContext context)    
         {
-            EmployeeRepository = employeeRepository;
-            DepartmentRepository = departmentRepository;
+            EmployeeRepository = new EmployeeRepository(context);
+            DepartmentRepository = new DepartmentRepository(context);
+            _context = context;
+        }
+
+        public int Complete()
+        {
+            return _context.SaveChanges();
+        }
+
+        public void Dispose() 
+        { 
+            _context.Dispose(); //Close Connection 
         }
     }
 }

@@ -68,6 +68,7 @@ namespace Demo.PL.Controllers
                 var mappedEmp = _mapper.Map<EmployeeViewModel, Employee>(employeeVM);
 
                 _uniteOfWork.EmployeeRepository.Add(mappedEmp);
+                var count =  _uniteOfWork.Complete();
                 TempData["Message"] = "The Employee Has Been Created Successfuly";
                 return RedirectToAction("Index");
             }
@@ -118,6 +119,7 @@ namespace Demo.PL.Controllers
                 {
                     var mappedEmp = _mapper.Map<EmployeeViewModel, Employee>(employeeVM);
                     _uniteOfWork.EmployeeRepository.Update(mappedEmp);
+                    _uniteOfWork.Complete();
                     return RedirectToAction(nameof(Index));
                 }
                 catch (Exception ex)
@@ -146,6 +148,7 @@ namespace Demo.PL.Controllers
             {
                 var mappedEmp = _mapper.Map<EmployeeViewModel, Employee>(employeeVM);
                 _uniteOfWork.EmployeeRepository.Delete(mappedEmp);
+                _uniteOfWork.Complete();
                 return RedirectToAction(nameof(Index));
             }
             catch (Exception ex)
