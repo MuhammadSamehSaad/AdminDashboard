@@ -33,11 +33,12 @@ namespace Demo.PL.Helpers
 
         public static void DeleteFile(string fileName, string folderName)
         {
+            //1: Get File Path
             string filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\files", folderName);
 
+            //2: Chcek If The File Exist
             if (!Directory.Exists(filePath))
                 File.Delete(filePath);
-
         }
     }
 }

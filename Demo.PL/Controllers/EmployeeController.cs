@@ -3,6 +3,7 @@ using AutoMapper;
 using Demo.BLL.Interfaces;
 using Demo.BLL.Repositories;
 using Demo.DAL.Entites;
+using Demo.PL.Helpers;
 using Demo.PL.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -51,6 +52,9 @@ namespace Demo.PL.Controllers
         {
             if (ModelState.IsValid)
             {
+                employeeVM.ImageName = DocumentSettings.UploadFile(employeeVM.Image, "images");
+
+                var mappedEmp = _mapper.Map<EmployeeViewModel, Employee>(employeeVM);
                 ///Manual Mapping
                 ///var mappedEmp = new Employee()
                 /// {
@@ -65,12 +69,14 @@ namespace Demo.PL.Controllers
                 ///DepartmentId = employeeVM.DepartmentId    
                 /// };
 
-                var mappedEmp = _mapper.Map<EmployeeViewModel, Employee>(employeeVM);
 
                 _uniteOfWork.EmployeeRepository.Add(mappedEmp);
-                var count =  _uniteOfWork.Complete();
+                _uniteOfWork.Complete();
+
+
                 TempData["Message"] = "The Employee Has Been Created Successfuly";
                 return RedirectToAction("Index");
+
             }
             return View(employeeVM);
         }
@@ -148,7 +154,12 @@ namespace Demo.PL.Controllers
             {
                 var mappedEmp = _mapper.Map<EmployeeViewModel, Employee>(employeeVM);
                 _uniteOfWork.EmployeeRepository.Delete(mappedEmp);
-                _uniteOfWork.Complete();
+
+                var count = _uniteOfWork.Complete();
+                if (count > 0)
+                {
+                    DocumentSettings.DeleteFile(employeeVM.ImageName, "images");
+                }
                 return RedirectToAction(nameof(Index));
             }
             catch (Exception ex)

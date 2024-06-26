@@ -47,6 +47,8 @@ namespace Demo.DAL.Entites
         public string ImageName { get; set; }
 
 
+
+
     }
 
 }
