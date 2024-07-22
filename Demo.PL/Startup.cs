@@ -1,11 +1,13 @@
 using Demo.BLL.Interfaces;
 using Demo.BLL.Repositories;
 using Demo.DAL.Contexts;
+using Demo.DAL.Entites;
 using Demo.PL.Extensions;
 using Demo.PL.Mappers;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -45,6 +47,35 @@ namespace Demo.PL
 
             services.AddApplicationServices();
 
+            ///
+            ///services.AddScoped<UserManager<ApplicationUser>>();
+            ///services.AddScoped<SignInManager<ApplicationUser>>();
+            ///services.AddScoped<RoleManager<IdentityRole>>();
+            ///
+            //or
+
+            services.AddIdentity<ApplicationUser, IdentityRole>(options =>
+            {
+                options.Password.RequiredUniqueChars = 2;
+                options.Password.RequireDigit = true;
+                options.Password.RequireNonAlphanumeric = true;
+                options.Password.RequireUppercase = true;
+                options.Password.RequiredLength = 5;
+
+                options.Lockout.AllowedForNewUsers = true;
+                options.Lockout.MaxFailedAccessAttempts = 5;
+                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
+
+                options.User.RequireUniqueEmail = true;
+
+                // Optionally configure user validation options
+                options.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
+                options.User.RequireUniqueEmail = true;
+            }).AddEntityFrameworkStores<MVCAppDbContext>();
+
+            //add with AddIdentity()
+            //services.AddAuthentication()
+
 
         }
 
@@ -72,7 +103,7 @@ namespace Demo.PL
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
+                    pattern: "{controller=Account}/{action=SignUp}/{id?}");
             });
         }
     }
